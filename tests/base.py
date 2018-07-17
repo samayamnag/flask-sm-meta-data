@@ -1,12 +1,10 @@
 from app import create_app
-from flast_testing import TestCase
+from flask_testing import TestCase
+from instance.config import TestingConfig
 
 
-app = create_app()
-
-
-class BaseTest(TestCase):
+class BaseTestCase(TestCase):
 
     def create_app(self):
-        app.config.from_object('instance.config.TestingConfig')
+        app = create_app(TestingConfig)
         return app

@@ -8,10 +8,11 @@ flask = "*"
 flask-mongoengine = "*"
 python-decouple = "*"
 flask-babel = "*"
-flask-testing = "*"
 
 [dev-packages]
 "flake8" = "*"
+faker = "*"
+flask-testing = "*"
 
 [requires]
 python_version = "3.6"

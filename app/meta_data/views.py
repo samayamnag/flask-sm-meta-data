@@ -3,41 +3,92 @@ from . import meta_data_blueprint
 from flask.views import MethodView
 from flask import make_response, jsonify
 from .models import State
-from app.utils import (
-    get_locale, per_page, page_num,
-    pagination_meta_data, pagination_links
-)
+from .services.state_service import get_states, get_districts, get_cities, get_civic_agencies
+from app.utils import get_locale
 
 
 class StateView(MethodView):
 
     def get(self):
-        states = State.objects.paginate(page=page_num(), per_page=per_page())
-        total_states = State.objects.count()
-        data = []
-        if states:
-            for state in states.items:
-                data.append({
-                    'id': str(state['id']),
-                    'title': state['title'][get_locale()][0],
-                    'code': state['code']
-                })
+        response = get_states()
+        if "data" in response:
             return make_response(jsonify(
-                data=data,
+                data=response['data'],
                 language=get_locale(),
-                links=pagination_links(states, total_states),
-                meta=pagination_meta_data(states, total_states)
+                links=response['links'],
+                meta=response['meta']
+            ))
+
+        return make_response(jsonify({'message': 'No records found'})), 404
+
+    
+class DistrictView(MethodView):
+
+    def get(self):
+        response = get_districts()
+        if "data" in response:
+            return make_response(jsonify(
+                data=response['data'],
+                language=get_locale(),
+                links=response['links'],
+                meta=response['meta']
             ))
 
         return make_response(jsonify({'message': 'No records found'})), 404
 
 
+class CityView(MethodView):
+
+    def get(self):
+        response = get_cities()
+        if "data" in response:
+            return make_response(jsonify(
+                data=response['data'],
+                language=get_locale(),
+                links=response['links'],
+                meta=response['meta']
+            ))
+
+        return make_response(jsonify({'message': 'No records found'})), 404
+
+
+class CivicAgencyView(MethodView):
+
+    def get(self):
+        response = get_civic_agencies()
+        if "data" in response:
+            return make_response(jsonify(
+                data=response['data'],
+                language=get_locale(),
+                links=response['links'],
+                meta=response['meta']
+            ))
+
+        return make_response(jsonify({'message': 'No records found'})), 404
+
+
+
 # Define the API resource
 state_view = StateView.as_view('state_view')
+district_view = DistrictView.as_view('district_view')
+city_view = CityView.as_view('city_view')
+civic_agency_view = CivicAgencyView.as_view('civic_agency_view')
 
 
-# Add the url rule for registering a user
+# Add the url rule for registering
 meta_data_blueprint.add_url_rule(
     '/states',
     view_func=state_view,
+    methods=['GET'])
+meta_data_blueprint.add_url_rule(
+    '/districts',
+    view_func=district_view,
+    methods=['GET'])
+meta_data_blueprint.add_url_rule(
+    '/cities',
+    view_func=city_view,
+    methods=['GET'])
+meta_data_blueprint.add_url_rule(
+    '/civic-agencies',
+    view_func=civic_agency_view,
     methods=['GET'])

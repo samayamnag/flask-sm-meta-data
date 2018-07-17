@@ -5,6 +5,7 @@ class Config(object):
 
     ENV = config('APP_ENV', default='production')
     DEBUG = config('APP_DEBUG', default=True, cast=bool)
+    TESTING = False
     LANGUAGES = {
         'en': 'English', 
         'hi': 'Hindi', 
@@ -28,7 +29,7 @@ class Config(object):
             'db': config('MONGO_DB_DATABASE', default='sm_meta_data'),
             'host': config('MONGO_DB_HOST', default='sm_meta_data'),
             'port': config('MONGO_DB_PORT', 27017, cast=int),
-            'alias': 'Testing',
+            'alias': 'testing',
             'connect': False,
         }
     ]
@@ -38,10 +39,13 @@ class TestingConfig(Config):
     TESTING = True
     MONGODB_SETTINGS = [
         {
-            'db': config('MONGO_DB_TESTING_DATABASE', default='sm_meta_data'),
-            'host': config('MONGO_DB_TESTING_HOST', default='sm_meta_data'),
+            'db': config('MONGO_DB_TESTING_DATABASE', default='testing_sm_meta_data'),
+            'host': config('MONGO_DB_TESTING_HOST', default='localhost'),
             'port': config('MONGO_DB_TESTING_PORT', 27017, cast=int),
             'alias': 'default',
-            'connect': False,
+            'connect': True,
         },
     ]
+
+class ProductionConfig(Config):
+    DEBUG = False
