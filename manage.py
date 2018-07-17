@@ -3,9 +3,13 @@ import unittest
 import subprocess
 from app import create_app
 from flask.cli import FlaskGroup
+from instance.config import TestingConfig
+from decouple import config
+from instance.config import TestingConfig
 
 
-app = create_app()
+
+app = create_app(TestingConfig)
 cli = FlaskGroup(create_app=create_app)
 
 

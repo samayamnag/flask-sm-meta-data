@@ -1,6 +1,7 @@
 import unittest
 from app import create_app
 from decouple import config
+from base import BaseTestCase
 from flask import current_app
 from flask_testing import TestCase
 
@@ -11,7 +12,7 @@ app = create_app()
 class TestDevelopmentConfig(TestCase):
 
     def create_app(self):
-        app.config.from_object(config('APP_SETTINGS'))
+        app.config.from_object('instance.config.Config')
         return app
 
     def test_app_is_development(self):
@@ -32,7 +33,7 @@ class TestTestingConfig(TestCase):
 class TestProductionConfig(TestCase):
 
     def create_app(self):
-        app.config.from_object(config('APP_SETTINGS'))
+        app.config.from_object('instance.config.ProductionConfig')
         return app
 
     def test_app_is_production(self):
